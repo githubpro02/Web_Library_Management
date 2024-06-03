@@ -1,15 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <!-- <img alt="Vue logo" src="./assets/logo.png">
+  <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+  <div id="app">
+     <!-- <Login/>
+     <Register/> -->
+      <!-- <ManageLists/> -->
+      <router-link to="/login"></router-link>
+      <router-link to="/register"></router-link>
+      <router-link to="/forgot"></router-link>
+      <router-link to="/homepage"></router-link>
+      <router-link to="/managelists"></router-link>
+      <router-link to="/bookform"></router-link>
+    <router-view/>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue'
+// import Login from './components/Login.vue'
+// import Register from './components/Register.vue'
+// import ManageLists from './components/ManageLists.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    // HelloWorld
+    // Login,
+    // Register
+    // ManageLists
   }
 }
 </script>
@@ -19,7 +37,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
   margin-top: 60px;
 }
