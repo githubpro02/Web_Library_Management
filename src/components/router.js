@@ -14,11 +14,32 @@ const Forgot = () =>
 const Homepage = () =>
     import("./Homepage.vue")
 
+const Update_Profile = () =>
+    import("./Update_Profile.vue")
+
 const ManageLists = () =>
     import("./ManageLists.vue")
 
-const BookForm = () =>
-    import("./BookForm.vue")
+const ChangePassword =() =>
+    import("./ChangePassword.vue")
+
+const StatisticsReports =() =>
+    import("./StatisticsReports.vue")
+
+const Admin_Dashboard =() =>
+    import("./Admin_Dashboard.vue") 
+
+const User_Manage =() =>
+    import("./User_Manage.vue")
+
+const Category_Manage =() =>
+    import("./Category_Manage.vue")
+
+const Book_Manage =() =>
+    import("./Book_Manage.vue")
+
+const Payment_Manage =() =>
+    import("./Payment_Manage.vue")
 
 Vue.use(VueRouter)
 
@@ -26,7 +47,7 @@ export const router = new VueRouter({
     routes: [
         {
             path: '/',
-            redirect: '/homepage'
+            redirect: '/login'
         },
         {
             path: '/login',
@@ -53,22 +74,58 @@ export const router = new VueRouter({
         },
 
         {
+            path: '/update_profile',
+            name: 'Update_Profile',
+            component: Update_Profile
+        },
+
+        {
             path: '/managelists',
             name: 'ManageLists',
             component: ManageLists
         },
 
         {
-            path: '/bookform',
-            name: 'BookForm',
-            component: BookForm
+            path: '/changepassword',
+            name: 'ChangePassword',
+            component: ChangePassword
         },
+
+        {
+            path: '/statistics-reports',
+            name: 'StatisticsReports',
+            component: StatisticsReports
+        },
+
+        {
+            path: '/admin_dashboard',
+            name: 'Admin_Dashboard',
+            component: Admin_Dashboard,
+            children: [
+                {
+                  path: 'user_manage',
+                  component: User_Manage
+                },
+
+                {
+                    path: 'book_manage',
+                    component: Book_Manage
+                },
+
+                {
+                    path: 'category_manage',
+                    component: Category_Manage
+                },
+
+                {
+                    path: 'payment_manage',
+                    component: Payment_Manage
+                },
+            ]
+        },
+        // {
+        //     path: '/',
+        //     redirect: '/admin_dashboard/user_manage'
+        // }
     ]
 })
-
-// const router = new VueRouter({
-//     router,
-//     mode: "history",
-// })
-
-// export default router;

@@ -3,25 +3,17 @@
     <div class="container">
       <router-link to="/" class="navbar-brand">Library Management</router-link>
       <div class="menu">
-        <div class="menu-item" @click="toggleDropdown" v-if="isUserLoggedIn">
+        <div class="menu-item" @click="toggleSubMenu">
           <i class="fas fa-user"></i>
-          <span v-if="isUserLoggedIn"> Welcome, {{ username }}</span>
-          <div class="submenu" v-if="isDropdownOpen">
-            <router-link to="/update-profile" class="submenu-item">Update Profile</router-link>
-            <router-link to="/change-password" class="submenu-item">Change Password</router-link>
-            <router-link v-if="isAdmin" to="/user-management" class="submenu-item">User Management</router-link>
-            <router-link to="/login" class="submenu-item">Logout</router-link>
+          <div class="submenu" v-if="showSubMenu">
+            <router-link to="/update_profile" class="submenu-item">Profile</router-link>
+            <router-link to="/changepassword" class="submenu-item">Change Password</router-link>
+            <li v-if="isAdmin">
+              <router-link to="/admin_dashboard" class="submenu-item">Admin</router-link>
+            </li>
+            <a class="submenu-item" href @click="logOut">Logout</a>
           </div>
         </div>
-        <!-- <div v-else>
-          <div class="menu-item" @click="toggleDropdown">
-            <i class="fas fa-user"></i>
-            <div class="submenu" v-if="isDropdownOpen">
-              <router-link to="/login" class="submenu-item">Login</router-link>
-              <router-link to="/register" class="submenu-item">Register</router-link>
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
   </nav>
@@ -31,35 +23,23 @@
 export default {
   data() {
     return {
-      isDropdownOpen: false,
-      isAdmin: false, // Change based on your user role logic
-      isUserLoggedIn: false, // Change based on your authentication logic
-      username: '', // Change based on your user data
+      showSubMenu: false,
     };
   },
-  methods: {
-    toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-    },
-    logout() {
-      // Add your logout functionality here
-      console.log("Logging out...");
-      // Clear authentication token
-      localStorage.removeItem('authToken');
-      // Update login state
-      this.isUserLoggedIn = false;
-      // Redirect to home or login page
-      this.$router.push('/login');
+  computed: {
+    isAdmin() {
+      const user = JSON.parse(localStorage.getItem('User'));
+      return user && user.role === 'admin';
     }
   },
-  mounted() {
-    // Check if user is logged in when component mounts
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      this.isUserLoggedIn = true;
-      // Fetch user data if necessary and set username and isAdmin
-      this.username = 'John Doe'; // Replace with actual username
-      this.isAdmin = true; // Replace with actual admin check
+  methods: {
+    toggleSubMenu() {
+      this.showSubMenu = !this.showSubMenu;
+    },
+    logOut() {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('User');
+      this.$router.push('/login');
     }
   }
 };
@@ -133,4 +113,5 @@ export default {
 .fa-user {
   font-size: 1.5rem;
 }
+
 </style>

@@ -1,62 +1,55 @@
 <template>
+  <div>
     <div class="login-container">
       <h2 class="login">Login</h2>
       <form @submit.prevent="handleLogin">
         <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" id="username" v-model="username" required />
+          <label for="email">Email</label>
+          <input type="email" id="email" v-model="user.email" required/>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" v-model="password" required />
+          <input type="password" id="password" v-model="user.password" required />
         </div>
-        <button class="b" type="submit" >Login</button>
+        <div class="form-group">
+          <button class="b" type="submit">
+            <span>Login</span>
+          </button>
+        </div>
       </form>
       <div class="a">
-        <router-link to="/register">Đăng ký</router-link>
-        <router-link to="/forgotpassword">Quên mật khẩu</router-link>
+        <router-link to="/register">Register</router-link>
+        <router-link to="/forgotpassword">ForgotPassword</router-link>
       </div>
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </div>
-  </template>
+  </div>
+</template>
   
   <script>
 // import { router } from './router';
 import axios from 'axios';
+import User from "../models/user.js";
 
   export default {
     name: 'user_login',
     data() {
       return {
-        username: '',
-        password: '',
+        user: new User('',''),
         errorMessage: ''
       };
     },
     methods: {
       async handleLogin() {
-        // Example login logic
-        // const validUsername = 'user';
-        // const validPassword = 'password';
-        
-        // if (this.username === validUsername && this.password === validPassword) {
-        //   // Redirect to dashboard or another page
-        //   alert('Login successful!');
-        // } else {
-        //   this.errorMessage = 'Invalid username or password.';
-        // }
-
         try {
-        const response = await axios.post('https://book-management-3td9.onrender.com/api/login', {
-          email: this.username,
-          password: this.password
-        });
+        const response = await axios.post('https://book-management-3td9.onrender.com/api/login', this.user);
 
         // Assuming the token is in response.data.token
-        const token = response.data.token;
+        const accessToken = response.data.data.accessToken;
 
         // Store the token (e.g., in localStorage or Vuex)
-        localStorage.setItem('authToken', token);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('User', JSON.stringify(response.data.data));
 
         // Redirect or update the UI to indicate the user is logged in
         this.$router.push('/homepage');

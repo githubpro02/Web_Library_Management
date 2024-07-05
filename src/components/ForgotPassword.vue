@@ -1,74 +1,134 @@
-<!-- src/components/ForgotPassword.vue -->
 <template>
-    <div class="forgot-password">
+  <div class="password-management">
+    <div v-if="!isResetPassword">
       <h2 class="h">Forgot Password</h2>
-      <form @submit.prevent="handleSubmit">
+      <form @submit.prevent="handleSubmitForgot">
         <div>
           <label for="email">Email:</label>
           <input type="email" v-model="email" id="email" required />
         </div>
         <button class="submit" type="submit">Submit</button>
-        <router-link to="/login">Quay về trang chủ</router-link>
+        <router-link to="/login" class="a">Back</router-link>
       </form>
-      <div v-if="message" class="message">{{ message }}</div>
+      <div v-if="message" :class="{'message': true, 'error': isError}">{{ message }}</div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "user_forgot",
-    data() {
-      return {
-        email: '',
-        message: ''
-      };
-    },
-    methods: {
-      handleSubmit() {
-        // Simulate an API call
-        setTimeout(() => {
-          this.message = `If an account with the email ${this.email} exists, a password reset link has been sent.`;
-          this.email = '';
-        }, 1000);
+
+    <div v-else>
+      <h2 class="h">Reset Password</h2>
+      <form @submit.prevent="handleSubmitReset">
+        <div>
+          <label for="token">Token:</label>
+          <input type="text" v-model="token" id="token" required />
+        </div>
+        <div>
+          <label for="newPassword">New Password:</label>
+          <input type="password" v-model="newPassword" id="newPassword" required />
+        </div>
+        <button class="submit" type="submit">Submit</button>
+        <router-link to="/login" class="a">Back</router-link>
+      </form>
+      <div v-if="message" :class="{'message': true, 'error': isError}">{{ message }}</div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: "user_password_management",
+  data() {
+    return {
+      email: '',
+      token: '',
+      newPassword: '',
+      message: '',
+      isError: false,
+      isResetPassword: false
+    };
+  },
+  methods: {
+    async handleSubmitForgot() {
+      try {
+        const response = await axios.post('https://book-management-3td9.onrender.com/api/forgot-password', { email: this.email });
+        this.message = response.data.message || `If an account with the email ${this.email} exists, a password reset link has been sent.`;
+        this.isError = false;
+        this.isResetPassword = true; // Move to the reset password form
+      } catch (error) {
+        this.message = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+        this.isError = true;
       }
+      this.email = '';
+    },
+    async handleSubmitReset() {
+      try {
+        const response = await axios.patch('https://book-management-3td9.onrender.com/api/forgot-password', {
+          resetToken: this.token,
+          newPass: this.newPassword
+        });
+        this.message = response.data.message || 'Your password has been successfully reset.';
+        this.isError = false;
+        this.isResetPassword = false; // Reset the form state after successful password reset
+      } catch (error) {
+        this.message = error.response ? error.response.data.message : 'An error occurred. Please try again.';
+        this.isError = true;
+      }
+      this.token = '';
+      this.newPassword = '';
     }
-  };
-  </script>
-  
-  <style scoped>
-  .forgot-password {
-    max-width: 400px;
-    margin: auto;
-    padding: 1em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
   }
+};
+</script>
 
-  .h {
-    text-align: center;
-    color: green;
-  }
+<style scoped>
+.password-management {
+  max-width: 400px;
+  margin: auto;
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
-  .submit {
-    background-color: green;
-  }
+.a {
+  font-size: 20px;
+  padding: 0.5em;
+  justify-content: space-around;
+  width: 100%;
+}
 
-  button:hover {
-    background-color: #0056b3;
-  }
+.h {
+  text-align: center;
+  color: green;
+}
 
-  .forgot-password h2 {
-    margin-bottom: 1em;
-  }
-  .forgot-password form {
-    display: flex;
-    flex-direction: column;
-  }
-  .forgot-password form div {
-    margin-bottom: 1em;
-  }
-  .forgot-password .message {
-    margin-top: 1em;
-    color: green;
-  }
-  </style>
+.submit {
+  background-color: green;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.password-management h2 {
+  margin-bottom: 1em;
+}
+
+.password-management form {
+  display: flex;
+  flex-direction: column;
+}
+
+.password-management form div {
+  margin-bottom: 1em;
+}
+
+.message {
+  margin-top: 1em;
+  color: green;
+}
+
+.error {
+  color: red;
+}
+</style>

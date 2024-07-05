@@ -9,13 +9,21 @@
       <router-link to="/register"></router-link>
       <router-link to="/forgot"></router-link>
       <router-link to="/homepage"></router-link>
+      <router-link to="/update_profile"></router-link>
       <router-link to="/managelists"></router-link>
-      <router-link to="/bookform"></router-link>
+      <router-link to="/bookmanagement"></router-link>
+      <router-link to="/changepassword"></router-link>
+      <router-link to="/statistics-report"></router-link>
+      <router-link to="/admin_dashboard"></router-link>
+      <router-link to="/user_manage"></router-link>
+      <router-link to="/category_manage"></router-link>
+      <router-link to="/book_manage"></router-link>
     <router-view/>
   </div>
 </template>
 
 <script>
+
 // import HelloWorld from './components/HelloWorld.vue'
 // import Login from './components/Login.vue'
 // import Register from './components/Register.vue'
